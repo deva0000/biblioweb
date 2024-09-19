@@ -1,0 +1,42 @@
+body {
+    margin: 0;               /* Remove default margin */
+    border: none;            /* Ensure no border is applied */
+    background-color: #ffffff; /* Optional: Set a background color */
+    overflow: auto;
+
+}
+
+.main_container {
+    width: 100vw;
+    height: 50vh;
+    background-color: aqua;
+    display: flex;
+    box-sizing: border-box;
+
+}
+.container1 {
+    width: 50%;
+    height: 100%;
+    background-color: rgb(0, 119, 255);
+    display: flex;
+    align-items: center; /* Vertical alignment */
+    justify-content: center; /* Horizontal alignment */
+  
+
+
+}
+.container2 {
+    width: 50%;
+    height: 100%;
+    background-color: rgb(255, 136, 0);
+    display: flex;
+    align-items: center; /* Vertical alignment */
+    justify-content: center; /* Horizontal alignment */
+
+
+
+}
+
+.mc_text {
+    position: absolute;
+}
