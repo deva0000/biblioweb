@@ -1,4 +1,4 @@
-// Replace with your actual Supabase Project URL and Anon Key
+ // Replace with your actual Supabase Project URL and Anon Key
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 
@@ -24,7 +24,11 @@ window.readEntries = async function() {
             <p>Created At: ${entry.created_at}</p>
             <p>Book Name: ${entry.book_name}</p>
         `;
-        
+        div.style.border = '2px solid white'; // Adjust thickness and style as needed
+        div.style.padding = '10px'; // Optional: Add some padding for better appearance
+        div.style.margin = '10px 0'; // Optional: Add some margin between divs
+
+    
         // Append the div to the container
         container.appendChild(div);
     }
@@ -32,10 +36,8 @@ window.readEntries = async function() {
 }
 
 // Function to create a new entry in Supabase
-async function createEntry(entryData) {
-    let { data, error } = await supabase
-    .from('entries')
-    .insert([entryData]);
+window.createEntry = async function(entryData) {
+    let { data, error } = await supabase.from('entries').insert([entryData]).select('*');
     if (error) {
     console.error('Error inserting entry:', error);
     } else {
