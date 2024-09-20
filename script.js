@@ -20,20 +20,22 @@ window.readEntries = async function() {
         
         // Set the content of the div
         div.innerHTML = `
-            <p>ID: ${entry.id}</p>
-            <p>Created At: ${entry.created_at}</p>
-            <p>Book Name: ${entry.book_name}</p>
+            <!-- <p>ID: ${entry.id}</p>-->
+            <!-- <p>Created At: ${entry.created_at}</p>-->
+            <p>Nome do livro: ${entry.book_name}</p>
+            <p>Autor: ${entry.author}</p>
         `;
         div.style.border = '2px solid white'; // Adjust thickness and style as needed
         div.style.padding = '10px'; // Optional: Add some padding for better appearance
         div.style.margin = '10px 0'; // Optional: Add some margin between divs
-
+        div.style.width = '30vw';
     
         // Append the div to the container
         container.appendChild(div);
     }
 }
 }
+readEntries();
 
 // Function to create a new entry in Supabase
 window.createEntry = async function(entryData) {
@@ -43,10 +45,18 @@ window.createEntry = async function(entryData) {
     } else {
     console.log('Entry added:', data);
     }
+    window.location.reload();
 }
 
-// Example usage
-readEntries();
+document.getElementById('add_book').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
 
-// Add an event listener to a button or form to create new entries
-// createEntry({ title: 'New Entry', description: 'This is a test entry' });
+    // Get the form data
+    let book_name = document.getElementById('book_name').value;
+    let author = document.getElementById('author').value;
+
+    // Call createEntry with the form data
+    createEntry({ book_name: book_name, author: author });
+
+});
+

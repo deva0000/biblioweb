@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BiblioWeb</title>
     <link rel="stylesheet" href="style.css">
-
+    
     <!-- Include the Supabase client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -20,7 +20,13 @@
     <header>BiblioWeb    </header>
     <main>
         <div id="entries-container" class="main_container"></div>
-
+        <form id="add_book" class="add_book" action="/action_page.php">
+            <label for="fname">Nome do livro:</label>
+            <input type="text" id="book_name" name="book_name"><br><br>
+            <label for="lname">Autor:</label><br>
+            <input type="text" id="author" name="author"><br><br>
+            <input type="submit" value="Adicionar">
+          </form>
     </main>
 
 

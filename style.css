@@ -17,6 +17,8 @@ header {
 
 main {
     height: 100vh;
+    display: flex;
+    justify-content: center;
 }
 .main_container {
     width: 100vw;
@@ -26,6 +28,7 @@ main {
     align-items: start;    /* Center aligns the divs (optional) */
     box-sizing: border-box;
     color: white;
+    background-color: #000000;
 }
 .container1 {
     width: 50%;
@@ -49,51 +52,18 @@ main {
 }
 
 
-.ubuntu-light {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-  }
-  
-  .ubuntu-regular {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-  }
-  
-  .ubuntu-medium {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 500;
-    font-style: normal;
-  }
-  
-  .ubuntu-bold {
-    font-family: "Ubuntu", sans-serif;
+.add_book input[type=text] {
+    background-color: #000000;
+    border: white;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.add_book input[type=submit] {
+    background-color: #000000;
+    border: white;
+    border-style: solid;
+    border-width: 1px;
+    color: rgb(255, 255, 255);
     font-weight: 700;
-    font-style: normal;
-  }
-  
-  .ubuntu-light-italic {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 300;
-    font-style: italic;
-  }
-  
-  .ubuntu-regular-italic {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 400;
-    font-style: italic;
-  }
-  
-  .ubuntu-medium-italic {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 500;
-    font-style: italic;
-  }
-  
-  .ubuntu-bold-italic {
-    font-family: "Ubuntu", sans-serif;
-    font-weight: 700;
-    font-style: italic;
-  }
-  
+}
