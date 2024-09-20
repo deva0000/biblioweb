@@ -2,54 +2,47 @@ body {
     margin: 0;               /* Remove default margin */
     border: none;            /* Ensure no border is applied */
     background-color: #000000; /* Optional: Set a background color */
-    overflow: auto;
+    overflow-x:hidden;
     font-family: ubuntu;
     color: white;
+    border-style: dashed;
+    border-color: red;
+    border-width: 3px;
+    width: auto;
 }
 header {
     background-color: rgb(0, 0, 0);
     height: 10vh;
-    width: 100vw;
+    width: auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-style: solid;
+    border-width: 3px;
+    color: white;
 }
 
 main {
-    height: 100vh;
     display: flex;
     justify-content: center;
 }
 .main_container {
-    width: 100vw;
+    width: auto;
     background-color: rgb(0, 0, 0);
-    display: flex;
+    display: block;
     flex-direction: column; /* Stacks divs vertically */
     align-items: start;    /* Center aligns the divs (optional) */
     box-sizing: border-box;
     color: white;
+    border: 3px;
+    border-style:inset;
+    border-color: rgb(255, 0, 191);
     background-color: #000000;
-}
-.container1 {
-    width: 50%;
-    height: 100%;
-    background-color: rgb(0, 119, 255);
-    display: flex;
-
-    padding: 15px;
-
+    height: auto;
 
 }
-.container2 {
-    width: 50%;
-    height: 100%;
-    background-color: rgb(255, 136, 0);
-    display: flex;
-}
 
-.mc_text {
-    position: absolute;
-}
+
 
 
 .manage_book input[type=text] {
