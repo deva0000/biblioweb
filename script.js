@@ -20,10 +20,11 @@ window.readEntries = async function() {
         
         // Set the content of the div
         div.innerHTML = `
-            <!-- <p>ID: ${entry.id}</p>-->
+            
             <!-- <p>Created At: ${entry.created_at}</p>-->
             <p>Nome do livro: ${entry.book_name}</p>
             <p>Autor: ${entry.author}</p>
+            <p>ID: ${entry.id}</p>
         `;
         div.style.border = '2px solid white'; // Adjust thickness and style as needed
         div.style.padding = '10px'; // Optional: Add some padding for better appearance
@@ -60,3 +61,24 @@ document.getElementById('add_book').addEventListener('submit', function(event) {
 
 });
 
+window.deleteEntry = async function(id_to_delete){
+    let { data, error } = await supabase.from('entries').delete().eq('id', id_to_delete);
+    if (error) {
+        console.error('Error inserting entry:', error);
+    } else {
+        console.log('Entry deleted:', data);
+    }
+    window.location.reload();
+}
+
+document.getElementById('delete_book').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Get the form data
+    let book_id = document.getElementById('book_id').value;
+
+
+    // Call createEntry with the form data
+    deleteEntry(book_id);
+
+});
