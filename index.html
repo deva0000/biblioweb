@@ -14,11 +14,23 @@
 
 
     <script type="module" src="script.js"> </script>
+    <script type="module" src="login.js"> </script>
 
 </head>
 <body>
     <header>BiblioWeb    </header>
     <main>
+        <div id="login-container">
+            <form id="login_form" class="manage_book">
+                <label for="username">Username:</label><br>
+                <input type="text" id="username_div" name="username" required><br><br>
+                <label for="password">Password:</label><br>
+                <input type="password" id="password_div" name="password" required><br><br>
+                <input type="submit" value="Login">
+            </form>
+            <div id="welcome-message" style="display: none;"></div>
+        </div>
+
         <div id="entries-container" class="main_container"></div>
         <div class="form_container">
             <form id="add_book" class="manage_book" action="/action_page.php">

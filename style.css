@@ -69,3 +69,11 @@ main {
     margin-right: 100px;
     padding: 10px;
 }
+
+input[type=password] {
+    background-color: #000000;
+    border: white;
+    border-style: solid;
+    border-width: 1px;
+    color: white;
+}
