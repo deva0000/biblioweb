@@ -8,7 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Function to read entries from Supabase
 window.readEntries = async function() {
-    let { data, error } = await supabase.from('entries').select('*');
+    let { data, error } = await supabase.from('books').select('*');
     if (error) {
     console.error('Error fetching entries:', error);
     } else {
@@ -44,7 +44,7 @@ readEntries();
 
 // Function to create a new entry in Supabase
 window.createEntry = async function(entryData) {
-    let { data, error } = await supabase.from('entries').insert([entryData]).select('*');
+    let { data, error } = await supabase.from('books').insert([entryData]).select('*');
     if (error) {
     console.error('Error inserting entry:', error);
     } else {
@@ -66,7 +66,7 @@ document.getElementById('add_book').addEventListener('submit', function(event) {
 });
 
 window.deleteEntry = async function(id_to_delete){
-    let { data, error } = await supabase.from('entries').delete().eq('id', id_to_delete);
+    let { data, error } = await supabase.from('books').delete().eq('id', id_to_delete);
     if (error) {
         console.error('Error inserting entry:', error);
     } else {
