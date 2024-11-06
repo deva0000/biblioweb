@@ -5,6 +5,7 @@ import { supabase } from "./script.js";
 if (document.cookie){
 logged = getCookieValue('logged')
 if (logged == 'true'){
+
     username = getCookieValue('username')
     password = getCookieValue('password')
 }
@@ -72,11 +73,9 @@ document.getElementById('login_form').addEventListener('submit',async function(e
     welcomeMessage.style.display = 'block';
 
     // Show the entries container and the forms
-    document.getElementById('entries-container').style.display = 'block';
-    document.querySelector('.form_container').style.display = 'block';
-    
-    // Optionally, hide the login form after submission
-//    document.getElementById('login-container').style.display = 'none';
+   // document.getElementById('entries-container').style.display = 'block';
+    //document.querySelector('.form_container').style.display = 'block';
+
 
 });
 
