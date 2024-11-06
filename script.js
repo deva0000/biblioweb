@@ -6,6 +6,7 @@ const supabaseUrl = 'https://fyygxgzlxnerquwrfpzy.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5eWd4Z3pseG5lcnF1d3JmcHp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY2NzYwNTcsImV4cCI6MjA0MjI1MjA1N30.OAASk220-J3v9aY3XmhPKY4QmAT9vgfb1oOhhfOUkCI';
 const supabase = createClient(supabaseUrl, supabaseKey);
 export { supabase };
+
 let container = document.getElementById('entries-container');
 // Function to read entries from Supabase
 window.readEntries = async function(table) {
@@ -23,9 +24,9 @@ window.readEntries = async function(table) {
 
 for (let entry of await window.readEntries("books")) {
     let div = document.createElement('div');
-    div.style.border = '2px solid white';
-    div.style.padding = '10px';
-    div.style.margin = '10px 0';
+    div.style.borderBottom = '1px solid black';
+    div.style.paddingt = '10px';
+    div.style.marginTop = '10px 0';
     div.style.width = '30vw';
 
     // Build the inner HTML dynamically based on entry data

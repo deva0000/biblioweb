@@ -90,6 +90,7 @@ if (logged == 'true'){
     document.getElementById('username_div').style.display = 'none'
     document.getElementById('login_submit').style.display = 'none'
     document.getElementById('signout_submit').style.display = 'block'
+    document.getElementById('user_reg').style.display = 'block'
     document.getElementById('login_form_welcome').style.display = 'block'
     document.getElementById('login_form_welcome').innerHTML = `Welcome, ${username}!`;
     const labels = document.getElementById('login_form').getElementsByTagName('label');

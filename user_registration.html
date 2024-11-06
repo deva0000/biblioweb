@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BiblioWeb</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Include the Supabase client library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script type="module" src="script.js"> </script>
+    <script type="module" src="login.js"> </script>
+</head>
+<body>
+    <header> <a href="index.html">BiblioWeb</a> </header>
+    <main>
+        <div class="form_container">
+            <form id="register_user" class="register_user">
+                <label for="user_email">E-mail:</label><br>
+                <input type="email" id="user_email" name="user_email" required><br><br>
+
+                <label for="user_password">Senha:</label><br>
+                <input type="password" id="user_password" name="user_password" required><br><br>
+
+                <label for="user_full_name">Nome Completo:</label><br>
+                <input type="text" id="user_full_name" name="user_full_name" required><br><br>
+
+                <label for="user_carteirinha">Carteirinha ID:</label><br>
+                <input type="text" id="user_carteirinha" name="user_carteirinha" required><br><br>
+
+                <label for="user_is_moderator">Moderador?:</label><br>
+                <input type="checkbox" id="user_is_moderator" name="user_is_moderator"><br><br>
+
+                <input type="submit" value="Register">
+            </form>
+        </div>
+    </main>
+</body>
+</html>
