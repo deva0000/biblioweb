@@ -6,7 +6,7 @@ body {
     overflow-x:hidden;
     font-family: ubuntu;
     color: black;
-    border-width: 3px;
+
     width: auto;
 }
 header {
@@ -68,6 +68,7 @@ main {
     border-width: 1px;
     margin-right: 100px;
     padding: 10px;
+    height: auto;
 }
 
 input[type=password] {
@@ -75,5 +76,9 @@ input[type=password] {
     border: black;
     border-style: solid;
     border-width: 1px;
-    color: white;
+
+}
+
+.login_form_welcome{
+    display: none;
 }

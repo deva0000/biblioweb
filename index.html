@@ -21,12 +21,15 @@
     <header>BiblioWeb    </header>
     <main>
         <div id="login-container">
+            
             <form id="login_form" class="manage_book">
+                <div id="login_form_welcome" class="login_form_welcome">Welcome, [USER]</div>
                 <label for="username">Username:</label><br>
                 <input type="text" id="username_div" name="username" required><br><br>
                 <label for="password">Password:</label><br>
                 <input type="password" id="password_div" name="password" required><br><br>
-                <input type="submit" value="Login">
+                <input id="login_submit" type="submit" value="Login">
+                <input id="signout_submit" type="button" value="Sign out" style="display: none;">
             </form>
             <div id="welcome-message" style="display: none;"></div>
         </div>
