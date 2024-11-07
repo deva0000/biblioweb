@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BiblioWeb</title>
@@ -18,11 +21,12 @@
     <script type="module" src="konami.js"> </script>
 
 </head>
+
 <body>
-    <header>BiblioWeb    </header>
+    <header>BiblioWeb </header>
     <main>
         <div id="login-container">
-            
+
             <form id="login_form" class="manage_book">
                 <div id="login_form_welcome" class="login_form_welcome">Welcome, [USER]</div>
                 <label for="username">Username:</label><br>
@@ -36,14 +40,34 @@
             <div id="welcome-message" style="display: none;"></div>
         </div>
 
-        <div id="entries-container" class="main_container"></div>
+        <div id="entries-container" class="main_container">
+            <div id="entries-container-books"></div>
+            <div class="entries-nav" style="display: flex; justify-content: center;">
+                <button id="previous-button" onclick="previousPage()" style="margin: 20px; display: block;width: 100px">Previous</button>
+                <button id="next-button" onclick="nextPage()" style="margin: 20px; width: 100px;">Next</button>
+            </div>
+
+        </div>
+
         <div class="form_container">
+
             <form id="add_book" class="manage_book" action="/action_page.php">
-                <label for="fname">Nome do livro:</label>
-                <input type="text" id="book_name" name="book_name"><br><br>
-                <label for="lname">Autor:</label><br>
-                <input type="text" id="author" name="author"><br><br>
-                <input type="submit" value="Adicionar">
+                <div style="display: flex;justify-content: center; margin-bottom: 20px;">Adicionar livro</div>
+                <div class="add_form_container">
+                    <label for="fname">Nome do livro:</label><br>
+                    <input type="text" id="book_name" name="book_name" required><br><br>
+
+                    <label for="lname">Gênero:</label><br>
+                    <input type="text" id="genre" name="genre" required><br><br>
+
+                    <label for="lname">Autor:</label><br>
+                    <input type="text" id="author" name="author" required><br><br>
+
+                    <label for="lname">Data de lançamento:</label><br>
+                    <input type="date" id="release_date" name="release_date" required><br><br>
+
+                    <input type="submit" value="Adicionar">
+                </div>
             </form><br><br>
 
             <form id="delete_book" class="manage_book" action="/action_page.php">
@@ -58,4 +82,5 @@
 
 
 </body>
+
 </html>

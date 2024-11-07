@@ -7,7 +7,7 @@ document.addEventListener('keydown', function(event) {
     const key = event.keyCode;
     
     // Reset if more than 200ms passed since the last key
-    if (currentTime - lastKeyTime > 200) {
+    if (currentTime - lastKeyTime > 350) {
         konamiPosition = 0;
     }
     

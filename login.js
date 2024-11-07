@@ -22,39 +22,41 @@ window.loginUser = async function(username, password) {
 
     if (error) {
     console.error('Error fetching user:', error);
+    return null
     } else {
     console.log('User found:', users);
     }
 
 
     // Check if user exists and if password matches
-    if (users && users[0].user_password === password) {
-        console.log('Login successful');
-        return users;  // Return user data if successful
+    if (users[0]){
+        if(users[0].user_password === password) {
+            console.log('Login successful');
+            return users;  // Return user data if successful
+        }
+        else{
+            console.log('USER OR PASSWORD INCORRECT');
+            console.log(users);
+            console.log(users[0].user_password);
+            console.log(password);
+            return 2
+        }
     }
-    else{
-        console.log('USER OR PASSWORD INCORRECT');
-        console.log(users);
-        console.log(users[0].user_password);
-        console.log(password);
-    }
-    return null;  // Return null if credentials are incorrect
 }
 
 
 document.getElementById('login_form').addEventListener('submit',async function(event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
 
-    // Get the username from the form
      username = document.getElementById('username_div').value;
      password = document.getElementById('password_div').value;
-     //globalThis.username = username;
-     //globalThis.password = password;
+
+
      let welcomeMessage = document.getElementById('welcome-message');
      let user_data = await loginUser(username,password)
 
-    if (user_data){
-        //welcomeMessage.innerHTML = `Welcome, ${user_data[0].user_full_name}!`;
+    if (user_data && user_data.length > 0){
+
         alert(`Welcome, ${user_data[0].user_full_name}!`);
         logged = true;
         console.log('LOGIN INFO:',user_data);
@@ -63,10 +65,11 @@ document.getElementById('login_form').addEventListener('submit',async function(e
         document.cookie = "logged="+logged;
         window.location.reload();
 
-    }
-    else if (user_data == null) {
-        welcomeMessage.innerHTML = `Incorrect`;
-    }
+    } else if (user_data == 2) { // password is wrong but user exists
+    welcomeMessage.innerHTML = `Incorrect password`;
+    } else { // user does not exist
+    welcomeMessage.innerHTML = `User does not exist`;
+}
     // Display a welcome message
     
     
