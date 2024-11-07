@@ -1,6 +1,6 @@
- // Replace with your actual Supabase Project URL and Anon Key
+// Replace with your actual Supabase Project URL and Anon Key
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
+console.log(window.location.pathname)
 
 const supabaseUrl = 'https://fyygxgzlxnerquwrfpzy.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5eWd4Z3pseG5lcnF1d3JmcHp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY2NzYwNTcsImV4cCI6MjA0MjI1MjA1N30.OAASk220-J3v9aY3XmhPKY4QmAT9vgfb1oOhhfOUkCI';
@@ -15,11 +15,12 @@ let container = document.getElementById('entries-container-books');
 
 
 // Function to read entries from Supabase
-window.readEntries = async function(table, page = 0) {
+window.readEntries = async function (table, page = 0) {
     const limit = 10; // Load 10 entries per page
     const offset = page * limit;
 
-    let { data, error } = await supabase.from(table).select('*').range(offset, offset + limit - 1);
+
+    let { data, error } = await supabase.from(table).select('*').order('book_name', { ascending: true }).range(offset, offset + limit - 1);
     if (error) {
         console.error('Error fetching entries:', error);
         return []; // Return empty array if there's an error
@@ -28,9 +29,8 @@ window.readEntries = async function(table, page = 0) {
         return data;
     }
 }
-
-
-async function loadPage(page = 0) {
+window.loadPage = async function(page = 0) {
+    let row = 0
     currentPage = page;
     container.innerHTML = ''; // Clear previous entries
 
@@ -60,41 +60,79 @@ async function loadPage(page = 0) {
         container.appendChild(noEntriesDiv);
     } else {
         // Populate entries if available
+
         for (let entry of entries) {
+            // Create a new div element
             let div = document.createElement('div');
-            div.style.borderBottom = '1px solid black';
+
+            // Set the content of the div
+            div.innerHTML = `
+                
+                <!-- <p>Created At: ${entry.created_at}</p>-->
+                <p>Título: ${entry.book_name}</p>
+                <p>Gênero: ${entry.genre}</p>
+                <p>Autor: ${entry.author}</p>
+                <p>Data de lançamento: ${entry.release_date}</p>
+                <p>Disponibilidade: ${entry.is_available ? "Disponível" : "Alugado"}</p>
+            `;
             div.style.padding = '10px';
-            div.style.marginTop = '10px';
+            div.style.margin = '10px 0';
             div.style.width = '30vw';
-
-            // Build the inner HTML dynamically based on entry data
-            div.innerHTML = Object.keys(entry)
-                .map(key => `<p>${key}: ${entry[key]}</p>`)
-                .join('');
-
+            if (row % 2 == 0) {
+                div.style.backgroundColor = '#E0E0E0';
+            }
+            row++
+            // Append the div to the container
             container.appendChild(div);
+            if (container.children.length == 1) {
+                div.style.marginTop = '0';
+            }
         }
+
+        /*  for (let entry of entries) {
+              let div = document.createElement('div');
+              div.style.borderBottom = '0px solid black';
+              div.style.padding = '10px';
+              div.style.marginTop = '10px';
+              div.style.width = '30vw';
+              if (row % 2 == 0) {
+                  div.style.backgroundColor = '#E0E0E0';
+              }
+              row++
+  
+              let html = '';
+              for (let key in entry) {
+                  html += `<p>${key}: ${entry[key]}</p>`;
+              }
+              div.innerHTML = html;
+  
+              container.appendChild(div);
+          }*/
     }
 }
+window.getCookieValue = function (name) {
+    return (document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '');
+}
 
-// Load the first page on initial load
-loadPage();
+
 
 
 
 
 // Function to create a new entry in Supabase
-window.createEntry = async function(table,entryData) {
+window.createEntry = async function (table, entryData) {
     let { data, error } = await supabase.from(table).insert([entryData]).select('*');
     if (error) {
-    console.error('Error inserting entry:', error);
+        console.error('Error inserting entry:', error); // Log error
+        return { data: null, error }; // Return error for external handling
     } else {
-    console.log('Entry added:', data);
+        console.log('Entry added:', data);
+        return { data, error: null }; // Return data if no error
     }
-    window.location.reload();
 }
 
-window.deleteEntry = async function(table,id_to_delete){
+
+window.deleteEntry = async function (table, id_to_delete) {
     let { data, error } = await supabase.from(table).delete().eq('id', id_to_delete);
     if (error) {
         console.error('Error inserting entry:', error);
@@ -104,37 +142,35 @@ window.deleteEntry = async function(table,id_to_delete){
     window.location.reload();
 }
 
-window.getCookieValue = function(name) {
-    return (document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '');
+if (document.getElementById('add_book')) {
+    document.getElementById('add_book').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get the form data
+        let book_name = document.getElementById('book_name').value;
+        let author = document.getElementById('author').value;
+        let genre = document.getElementById('genre').value;
+        let release_date = document.getElementById('release_date').value;
+
+        // Call createEntry with the form data
+        createEntry("books", { book_name: book_name, author: author, genre: genre, release_date: release_date });
+        window.location.reload();
+    });
 }
-  
 
-document.getElementById('add_book').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
+if (document.getElementById('delete_book')) {
+    document.getElementById('delete_book').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
 
-    // Get the form data
-    let book_name = document.getElementById('book_name').value;
-    let author = document.getElementById('author').value;
-    let genre = document.getElementById('genre').value;
-    let release_date = document.getElementById('release_date').value;
-
-    // Call createEntry with the form data
-    createEntry("books",{ book_name: book_name, author: author, genre: genre, release_date: release_date });
-
-});
+        // Get the form data
+        let book_id = document.getElementById('book_id').value;
 
 
-document.getElementById('delete_book').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
+        // Call createEntry with the form data
+        deleteEntry("books", book_id);
 
-    // Get the form data
-    let book_id = document.getElementById('book_id').value;
-
-
-    // Call createEntry with the form data
-    deleteEntry("books", book_id);
-
-});
+    });
+}
 
 
 
@@ -142,17 +178,17 @@ document.getElementById('delete_book').addEventListener('submit', function(event
 
 window.nextPage = function () {
     currentPage += 1;
-    loadPage(currentPage);
+    window.loadPage(currentPage);
 
     // Show "Previous" button if we are on the second page or beyond
     document.getElementById('previous-button').style.display = currentPage > 0 ? "inline" : "none";
     window.scrollTo(0, 0); // Scroll to the top
 }
 
- window.previousPage = function() {
+window.previousPage = function () {
     if (currentPage > 0) {
         currentPage -= 1;
-        loadPage(currentPage);
+        window.loadPage(currentPage);
     }
 
     // Hide "Previous" button if we're back on the first page
@@ -160,3 +196,209 @@ window.nextPage = function () {
     window.scrollTo(0, 0); // Scroll to the top
 }
 
+//Add User
+if (document.getElementById('register_user')) {
+    document.getElementById('register_user').addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get the form data
+        let email = document.getElementById('user_email').value;
+        let password = document.getElementById('user_password').value;
+        let full_name = document.getElementById('user_full_name').value;
+        let student_card = document.getElementById('user_carteirinha').value;
+        let student_card_turma = document.getElementById('user_carteirinha_turma').value;
+        let is_moderator = document.getElementById('user_is_moderator').checked;
+
+        const { data, error } = await createEntry("users", {
+            user_email: email,
+            user_password: password,
+            user_full_name: full_name,
+            user_carteirinha_mat: student_card,
+            user_carteirinha_turma: student_card_turma,
+            user_is_moderator: is_moderator
+        });
+
+        if (error) {
+            console.error("THERE WAS THIS ERROR RIGHT HERE: " + error.message);
+            showError("Error:\n\n\n\n" + error.message);
+        } else {
+            showError("Usúario cadastrado com sucesso");
+
+        }
+
+
+    });
+}
+
+window.deleteUser = async function (email) {
+    //fetch data based on email
+    let { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('user_email', email)
+        .single(); // Use single to return just one record
+
+    //logs any error (yet to see something happen)
+    if (error) {
+        console.error('Error fetching user:', error.message);
+        return { data: null, error };
+    }
+
+    //logs the user that will be deleted
+    console.log('User data to be deleted:', data);
+
+    //deletes user and stores errors inside the deleteError var
+    let { error: deleteError } = await supabase
+        .from('users')
+        .delete()
+        .eq('user_email', email);
+
+    //logs the error if it exists
+    if (deleteError) {
+        console.error('Error deleting user:', deleteError);
+        return { data: null, error: deleteError };
+    }
+
+    //return confirmation that the user has been deleted
+    console.log(`User with email ${email} deleted.`);
+    return { data, error: null };
+}
+
+
+
+
+if (document.getElementById('delete_user')) {
+    document.getElementById('delete_user').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        let userEmail = document.getElementById('delete_user_email').value;
+
+        const { data, error } = await deleteUser(userEmail);
+
+        if (error) {
+            console.error("Error deleting user: " + error.message);
+            showError("Error:\n\n" + error.message);
+        } else {
+            showError("Usuário deletado com sucesso");
+            document.getElementById('delete_user_email').value = '';
+        }
+    });
+}
+
+//Rental
+
+if (document.getElementById('rental-form')) {
+    document.getElementById('rental-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const studentCardId = document.getElementById('student-card-id').value;
+        const bookId = document.getElementById('book-id').value;
+
+        // Check if the book is available
+        const { data: bookData, error: availabilityError } = await supabase
+            .from('books')  // Assuming the books table is named 'books'
+            .select('is_available')  // Check availability status
+            .eq('id', bookId)
+            .single();
+
+        const resultDiv = document.getElementById('result');
+
+        if (availabilityError) {
+            resultDiv.textContent = `Error checking availability: ${availabilityError.message}`;
+            return;
+        }
+
+        if (!bookData || !bookData.is_available) {
+            resultDiv.textContent = 'Error: The book is not available.';
+            return;
+        }
+
+        // Calculate the return date (15 days from now)
+        const returnDate = new Date();
+        returnDate.setDate(returnDate.getDate() + 15);  // Add 15 days
+
+        // Convert to ISO string (timestampz format)
+        const returnDateString = returnDate.toISOString();
+
+        // Rent the book to the student (update the book's availability)
+        const { data: rentData, error: rentError } = await supabase
+            .from('books')
+            .update({ is_available: false, rented_by: studentCardId, rented_at: new Date(),return_date: returnDateString })
+            .eq('id', bookId);
+
+        if (rentError) {
+            resultDiv.textContent = `Error renting the book: ${rentError.message}`;
+            return;
+        }
+        console.log(rentData)
+
+        // Success
+        resultDiv.textContent = `Success! The book has been rented to the student with ID ${studentCardId}.`;
+    });
+}
+
+window.searchBooks = async function () {
+    const searchQuery = document.getElementById('search-bar').value.trim().toLowerCase();
+
+    // Clear previous entries
+    container.innerHTML = 'Loading...';
+
+    // Fetch books where the title matches the search query
+    const { data: books, error } = await supabase
+        .from('books')
+        .select('*')
+        .ilike('book_name', `%${searchQuery}%`);  // ilike is case-insensitive
+
+    if (error) {
+        console.error('Error searching books:', error);
+        container.innerHTML = 'Error fetching results.';
+        return;
+    }
+
+    // If no books are found, show "No results found"
+    if (!books.length) {
+        container.innerHTML = '<p>No results found</p>';
+        return;
+    }
+
+    // Display the search results
+    container.innerHTML = '';  // Clear loading text
+    let search_row = 0
+    for (let book of books) {
+        // Create a new div element
+        let div = document.createElement('div');
+
+        // Set the content of the div
+  
+        let moderatorContent = "";
+        if (globalThis.is_moderator) {
+            moderatorContent = `<p>Identificação: ${book.id }</p>`;
+        }
+
+        // Set the content of the div
+        div.innerHTML = `
+            <!-- <p>Created At: ${book.created_at}</p>-->
+            <p>Título: ${book.book_name}</p>
+            <p>Gênero: ${book.genre}</p>
+            <p>Autor: ${book.author}</p>
+            <p>Data de lançamento: ${book.release_date}</p>
+            <p>Disponibilidade: ${book.is_available ? "Disponível" : "Alugado"}</p>
+            <p>${moderatorContent}</p>
+                `;
+
+
+
+        div.style.padding = '10px';
+        div.style.margin = '10px 0';
+        div.style.width = '30vw';
+        if (search_row % 2 == 0) {
+            div.style.backgroundColor = '#E0E0E0';
+        }
+        search_row++
+        // Append the div to the container
+        container.appendChild(div);
+        if (container.children.length == 1) {
+            div.style.marginTop = '0';
+        }
+    }
+}

@@ -16,8 +16,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-    <script type="module" src="script.js"> </script>
+
     <script type="module" src="login.js"> </script>
+    <script type="module" src="script.js"> </script>
     <script type="module" src="konami.js"> </script>
 
 </head>
@@ -25,25 +26,48 @@
 <body>
     <header>BiblioWeb </header>
     <main>
-        <div id="login-container">
+        <div class="left_panel">
+            <div id="login-container">
+                <form id="login_form" class="manage_book">
+                    <div id="login_form_welcome" class="login_form_welcome">Bem vindo, [USER]</div>
+                    <label for="username">Username:</label><br>
+                    <input type="text" id="username_div" name="username" required><br><br>
+                    <label for="password">Password:</label><br>
+                    <input type="password" id="password_div" name="password" required><br><br>
+                    <input id="login_submit" type="submit" value="Login">
+                    <a href="user_registration.html" id="user_reg" class="button">Gerenciar Usuário</a>
+                    <input id="signout_submit" type="button" value="Sair" style="display: none;">
+                </form>
+                <div id="welcome-message" style="display: none;"></div>
+            </div>
 
-            <form id="login_form" class="manage_book">
-                <div id="login_form_welcome" class="login_form_welcome">Welcome, [USER]</div>
-                <label for="username">Username:</label><br>
-                <input type="text" id="username_div" name="username" required><br><br>
-                <label for="password">Password:</label><br>
-                <input type="password" id="password_div" name="password" required><br><br>
-                <input id="login_submit" type="submit" value="Login">
-                <a href="user_registration.html" id="user_reg" class="button">Registrar Usuário</a>
-                <input id="signout_submit" type="button" value="Sign out" style="display: none;">
+            <form id="rental-form" class="manage_book" style="display: none;">
+                <h1>Alugar livro</h1>
+                <label for="student-card-id">Carteirinha do estudante:</label>
+                <input type="text" id="student-card-id" name="student-card-id" required><br><br>
+
+                <label for="book-id">Identificação do livro:</label>
+                <input type="text" id="book-id" name="book-id" required><br><br>
+
+                <button type="submit">Alugar livro</button>
             </form>
-            <div id="welcome-message" style="display: none;"></div>
+
+            <div id="result"></div>
         </div>
 
+
         <div id="entries-container" class="main_container">
+            <div class="book_search" style="display: flex; flex-direction: column; background-color:rgb(197, 196, 196) ;">
+                <input type="text" id="search-bar" placeholder="Search for books..." style="margin : 10px">
+                <button onclick="searchBooks()" style="margin : 5px">Search</button>
+
+            </div>
+            <div id="entries-container-books"></div>
+
             <div id="entries-container-books"></div>
             <div class="entries-nav" style="display: flex; justify-content: center;">
-                <button id="previous-button" onclick="previousPage()" style="margin: 20px; display: block;width: 100px">Previous</button>
+                <button id="previous-button" onclick="previousPage()"
+                    style="margin: 20px; display: block;width: 100px">Previous</button>
                 <button id="next-button" onclick="nextPage()" style="margin: 20px; width: 100px;">Next</button>
             </div>
 
@@ -51,7 +75,7 @@
 
         <div class="form_container">
 
-            <form id="add_book" class="manage_book" action="/action_page.php">
+            <form id="add_book" class="manage_book" action="/action_page.php" style="display: none;">
                 <div style="display: flex;justify-content: center; margin-bottom: 20px;">Adicionar livro</div>
                 <div class="add_form_container">
                     <label for="fname">Nome do livro:</label><br>
@@ -70,7 +94,7 @@
                 </div>
             </form><br><br>
 
-            <form id="delete_book" class="manage_book" action="/action_page.php">
+            <form id="delete_book" class="manage_book" action="/action_page.php" style="display: none;">
                 <label for="book_id">Identificação do livro:</label>
                 <input type="text" id="book_id" name="book_id"><br><br>
 

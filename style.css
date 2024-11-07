@@ -150,6 +150,8 @@ a:active {
 
 .register_user input[type="email"],
 .register_user input[type="password"],
+.register_user input[type="number"],
+
 .register_user input[type="text"] {
     width: 90%;
     padding: 8px 12px;
@@ -165,8 +167,15 @@ a:active {
     margin-right: 10px;
 }
 
-.register_user input[type="submit"]:hover {
+.register_user input[type="submit"]:hover
+ {
     background-color: #333;
+    
+}
+.manage_book button:hover
+ {
+    background-color: #ffffff;
+    
 }
 
 .register_user input[type="submit"] {
@@ -200,4 +209,39 @@ a:active {
 input[type='button']{
     font-family: inherit;
     font-weight: 500;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield; /* Standard */
+}
+
+.popup {
+    display: none;
+    white-space: pre;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 4px 20px 5px rgba(0, 0, 0, 0.301);
+    padding: 20px;
+    text-align: center;
+}
+
+.popup.show {
+    display: block;
+}
+
+.ok-button {
+    margin-top: 10px;
+    padding: 5px 20px;
 }
