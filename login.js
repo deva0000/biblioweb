@@ -122,7 +122,7 @@ console.log('password ' + password)
 console.log('User is moderator? ' + is_moderator)
 
 
-if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+if (document.getElementById('delete_book')) {
 
     if (globalThis.is_moderator == "true"){
 
