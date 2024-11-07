@@ -358,6 +358,7 @@ if (document.getElementById('rental-form')) {
         const studentCardId = document.getElementById('student-card-id').value;
         const bookId = document.getElementById('book-id').value;
 
+
         // Check if the book is available
         const { data: bookData, error: availabilityError } = await supabase
             .from('books')  // Assuming the books table is named 'books'
@@ -465,4 +466,56 @@ window.searchBooks = async function () {
             div.style.marginTop = '0';
         }
     }
+}
+
+
+//Return form
+
+if (document.getElementById('return-form')) { 
+    document.getElementById('return-form').addEventListener('submit', async function (event) { 
+        event.preventDefault();
+
+        const studentCardId = document.getElementById('return-student-card-id').value;
+        const bookId = document.getElementById('return-book-id').value;
+        console.log("Trying to return with ID:" + studentCardId + "and Book" + bookId)
+
+        // Check if the book is currently rented by this student
+        const { data: bookData, error: rentCheckError } = await supabase
+            .from('books')  // Ensure this table is correct
+            .select('is_available, rented_by')  // Retrieve rental status and rented_by field
+            .eq('id', bookId)
+            .single();
+
+        const resultDiv = document.getElementById('result');
+
+        if (rentCheckError) {
+            resultDiv.textContent = `Error checking rental status: ${rentCheckError.message}`;
+            return;
+        }
+
+        if (!bookData || bookData.is_available || bookData.rented_by != studentCardId) {
+            resultDiv.textContent = 'Erro: Este livro não está alugado ou está alugado por outro estudante.';
+            return;
+        }
+
+        // Update the book's status to available and clear rental information
+        const { data: returnData, error: returnError } = await supabase
+            .from('books')
+            .update({ 
+                is_available: true, 
+                rented_by: null, 
+                rented_at: null, 
+                return_date: null 
+            })
+            .eq('id', bookId);
+
+        if (returnError) {
+            resultDiv.textContent = `Error returning the book: ${returnError.message}`;
+            return;
+        }
+        console.log("Book returned: " + returnData)
+
+        // Success
+        resultDiv.textContent = `Êxito. O livro foi devolvido pela a Matrícula: ${studentCardId}.`;
+    });
 }

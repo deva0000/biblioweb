@@ -129,6 +129,7 @@ if (document.getElementById('delete_book')) {
     document.getElementById('delete_book').style.display = 'block';
     document.getElementById('add_book').style.display = 'block';
     document.getElementById('rental-form').style.display = 'block';
+    document.getElementById('return-form').style.display = 'block';
 }
     // Load the first page on initial load
     window.loadPage();

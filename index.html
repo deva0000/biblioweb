@@ -51,7 +51,17 @@
 
                 <button type="submit">Alugar livro</button>
             </form>
+            
+            <form id="return-form" class="manage_book" style="display: none;">
+                <h1>Devolver livro</h1>
+                <label for="return-student-card-id">Carteirinha do estudante:</label>
+                <input type="text" id="return-student-card-id" name="student-card-id" required><br><br>
 
+                <label for="return-book-id">Identificação do livro:</label>
+                <input type="text" id="return-book-id" name="book-id" required><br><br>
+
+                <button type="submit">Devolver livro</button>
+            </form>
             <div id="result"></div>
         </div>
 
