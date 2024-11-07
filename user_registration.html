@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BiblioWeb</title>
@@ -15,11 +18,12 @@
     <script type="module" src="script.js"> </script>
 
 </head>
+
 <body>
     <header> <a href="index.html">BiblioWeb</a> </header>
     <main>
         <div class="form_container" style="display: flex;">
-            
+
             <form id="register_user" class="register_user">
                 <label for="user_email">E-mail:</label><br>
                 <input type="email" id="user_email" name="user_email" required><br><br>
@@ -42,17 +46,33 @@
                 <input type="submit" value="Register">
             </form>
 
-            <div class="register_user" style="margin: 50px; height: 30%;">
-                <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                    <h2>Deletar Usuário</h2>
+            <div class="right_panel">
+
+                <div class="fetch_user register_user" style="margin: 50px 0px 0px 50px; height: 30%;">
+                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                        <h2>Consultar Usuário</h2>
+                    </div>
+    
+                    <form id="fetch_user" class="fetch_user_container">
+                        <label for="delete_user_email">Mátricula do usuário:</label>
+                        <input type="number" id="fetch_user_mat" required>
+    
+                        <input type="submit" value="Consultar Usuário">
+                    </form>
                 </div>
 
-                <form id="delete_user" class="add_form_container">
-                    <label for="delete_user_email">E-mail do usuário:</label>
-                    <input type="email" id="delete_user_email" required>
+                <div class="delete_user register_user" style="margin: 50px; height: 30%;">
+                    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                        <h2>Deletar Usuário</h2>
+                    </div>
 
-                    <input type="submit" value="Deletar Usuário">
-                </form>
+                    <form id="delete_user" class="add_form_container">
+                        <label for="delete_user_email">E-mail do usuário:</label>
+                        <input type="email" id="delete_user_email" required>
+
+                        <input type="submit" value="Deletar Usuário">
+                    </form>
+                </div>
             </div>
         </div>
         </div>
@@ -65,7 +85,7 @@
         const popup = document.getElementById('errorPopup');
         const message = document.getElementById('errorMessage');
         const okButton = popup.querySelector('.ok-button');
-
+        
         function showError(errorText) {
             message.textContent = errorText;
             popup.classList.add('show');
@@ -78,4 +98,5 @@
 
     </script>
 </body>
+
 </html>

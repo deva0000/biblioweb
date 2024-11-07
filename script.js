@@ -29,7 +29,7 @@ window.readEntries = async function (table, page = 0) {
         return data;
     }
 }
-window.loadPage = async function(page = 0) {
+window.loadPage = async function (page = 0) {
     let row = 0
     currentPage = page;
     container.innerHTML = ''; // Clear previous entries
@@ -62,6 +62,11 @@ window.loadPage = async function(page = 0) {
         // Populate entries if available
 
         for (let entry of entries) {
+            let moderatorContent = "";
+            if (globalThis.is_moderator) {
+                moderatorContent = `<p>Identificação: ${entry.id}</p>`;
+            }
+
             // Create a new div element
             let div = document.createElement('div');
 
@@ -74,6 +79,7 @@ window.loadPage = async function(page = 0) {
                 <p>Autor: ${entry.author}</p>
                 <p>Data de lançamento: ${entry.release_date}</p>
                 <p>Disponibilidade: ${entry.is_available ? "Disponível" : "Alugado"}</p>
+                <p>${moderatorContent}</p>
             `;
             div.style.padding = '10px';
             div.style.margin = '10px 0';
@@ -143,7 +149,7 @@ window.deleteEntry = async function (table, id_to_delete) {
 }
 
 if (document.getElementById('add_book')) {
-    document.getElementById('add_book').addEventListener('submit', function (event) {
+    document.getElementById('add_book').addEventListener('submit', async function (event) {
         event.preventDefault(); // Prevent the default form submission
 
         // Get the form data
@@ -153,7 +159,7 @@ if (document.getElementById('add_book')) {
         let release_date = document.getElementById('release_date').value;
 
         // Call createEntry with the form data
-        createEntry("books", { book_name: book_name, author: author, genre: genre, release_date: release_date });
+        await createEntry("books", { book_name: book_name, author: author, genre: genre, release_date: release_date });
         window.location.reload();
     });
 }
@@ -264,6 +270,25 @@ window.deleteUser = async function (email) {
     return { data, error: null };
 }
 
+window.fetchUser = async function (mat) {
+    //fetch data based on mat id
+    let { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('user_carteirinha_mat', mat)
+        .single(); // Use single to return just one record
+
+    //logs any error (yet to see something happen)
+    if (error) {
+        console.error('Error fetching user:', error.message);
+        return { data: null, error };
+    }
+
+    //logs the user 
+    console.log('User data: ', data)
+    return { data, error: null };
+
+}
 
 
 
@@ -283,6 +308,45 @@ if (document.getElementById('delete_user')) {
             document.getElementById('delete_user_email').value = '';
         }
     });
+}
+
+if (document.getElementById('fetch_user')) {
+    document.getElementById('fetch_user').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        let userMatricula = document.getElementById('fetch_user_mat').value;
+        console.log("Getting info from mat " + document.getElementById('fetch_user_mat').value)
+
+        const { data, error } = await fetchUser(userMatricula);
+        console.log(data.user_rented_books)
+        const rentedBookIds = data.user_rented_books;
+        // Fetch book titles based on IDs
+
+        const bookTitles = [];
+        for (const bookId of rentedBookIds) {
+            let { data: bookData, error } = await supabase
+                .from("books")
+                .select("book_name")
+                .eq("id", bookId)
+                .single();
+                if (error) {
+                    console.error(`Error fetching book with ID ${bookId}:`, error);
+                    bookTitles.push("Unknown Book"); // Default title if there's an error
+                } else {
+                    bookTitles.push("\n"+bookData.book_name);
+
+                }
+        }
+    
+
+        if (error) {
+        console.error("Error fetching user: " + error.message);
+        showError("Error:\n\n" + error.message);
+    } else {
+        showError(`Nome: ${data.user_full_name}\nEmail: ${data.user_email}\nPermissões: ${data.user_is_moderator ? "Moderador" : "Usuário"}\nMatrícula: ${data.user_carteirinha_mat}\nTurma: ${data.user_carteirinha_turma}\n\nLivros Alugados: ${bookTitles}`);
+        document.getElementById('fetch_user_mat').value = '';
+    }
+});
 }
 
 //Rental
@@ -323,7 +387,7 @@ if (document.getElementById('rental-form')) {
         // Rent the book to the student (update the book's availability)
         const { data: rentData, error: rentError } = await supabase
             .from('books')
-            .update({ is_available: false, rented_by: studentCardId, rented_at: new Date(),return_date: returnDateString })
+            .update({ is_available: false, rented_by: studentCardId, rented_at: new Date(), return_date: returnDateString })
             .eq('id', bookId);
 
         if (rentError) {
@@ -333,7 +397,7 @@ if (document.getElementById('rental-form')) {
         console.log(rentData)
 
         // Success
-        resultDiv.textContent = `Success! The book has been rented to the student with ID ${studentCardId}.`;
+        resultDiv.textContent = `Êxito. O livro foi alugado para a Matrícula: ${studentCardId}.`;
     });
 }
 
@@ -369,10 +433,10 @@ window.searchBooks = async function () {
         let div = document.createElement('div');
 
         // Set the content of the div
-  
+
         let moderatorContent = "";
         if (globalThis.is_moderator) {
-            moderatorContent = `<p>Identificação: ${book.id }</p>`;
+            moderatorContent = `<p>Identificação: ${book.id}</p>`;
         }
 
         // Set the content of the div
