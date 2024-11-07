@@ -73,9 +73,9 @@ document.getElementById('login_form').addEventListener('submit', async function 
         window.location.reload();
 
     } else if (user_data == 2) { // password is wrong but user exists
-        welcomeMessage.innerHTML = `Incorrect password`;
+        welcomeMessage.innerHTML = `Senha incorreta `;
     } else { // user does not exist
-        welcomeMessage.innerHTML = `User does not exist`;
+        welcomeMessage.innerHTML = `Este usuário não existe`;
     }
     // Display a welcome message
 
@@ -102,7 +102,7 @@ if (logged == 'true') {
     document.getElementById('signout_submit').style.display = 'block'
     document.getElementById('user_reg').style.display = 'block'
     document.getElementById('login_form_welcome').style.display = 'block'
-    document.getElementById('login_form_welcome').innerHTML = `Welcome, ${username}!`;
+    document.getElementById('login_form_welcome').innerHTML = `Bem-vindo, ${username}!`;
     const labels = document.getElementById('login_form').getElementsByTagName('label');
     for (let label of labels) {
         label.style.display = 'none';

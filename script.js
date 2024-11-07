@@ -323,30 +323,32 @@ if (document.getElementById('fetch_user')) {
         // Fetch book titles based on IDs
 
         const bookTitles = [];
-        for (const bookId of rentedBookIds) {
-            let { data: bookData, error } = await supabase
-                .from("books")
-                .select("book_name")
-                .eq("id", bookId)
-                .single();
+        if (rentedBookIds) {
+            for (const bookId of rentedBookIds) {
+                let { data: bookData, error } = await supabase
+                    .from("books")
+                    .select("book_name")
+                    .eq("id", bookId)
+                    .single();
                 if (error) {
                     console.error(`Error fetching book with ID ${bookId}:`, error);
                     bookTitles.push("Unknown Book"); // Default title if there's an error
                 } else {
-                    bookTitles.push("\n"+bookData.book_name);
+                    bookTitles.push("\n" + bookData.book_name);
 
                 }
+            }
         }
-    
+        else { bookTitles.push("\nNenhum livro alugado.") }
 
         if (error) {
-        console.error("Error fetching user: " + error.message);
-        showError("Error:\n\n" + error.message);
-    } else {
-        showError(`Nome: ${data.user_full_name}\nEmail: ${data.user_email}\nPermissões: ${data.user_is_moderator ? "Moderador" : "Usuário"}\nMatrícula: ${data.user_carteirinha_mat}\nTurma: ${data.user_carteirinha_turma}\n\nLivros Alugados: ${bookTitles}`);
-        document.getElementById('fetch_user_mat').value = '';
-    }
-});
+            console.error("Error fetching user: " + error.message);
+            showError("Error:\n\n" + error.message);
+        } else {
+            showError(`Nome: ${data.user_full_name}\nEmail: ${data.user_email}\nPermissões: ${data.user_is_moderator ? "Moderador" : "Usuário"}\nMatrícula: ${data.user_carteirinha_mat}\nTurma: ${data.user_carteirinha_turma}\n\nLivros Alugados: ${bookTitles}`);
+            document.getElementById('fetch_user_mat').value = '';
+        }
+    });
 }
 
 //Rental
@@ -354,7 +356,7 @@ if (document.getElementById('fetch_user')) {
 if (document.getElementById('rental-form')) {
     document.getElementById('rental-form').addEventListener('submit', async function (event) {
         event.preventDefault();
-
+        console.log("Tentando alugar livro")
         const studentCardId = document.getElementById('student-card-id').value;
         const bookId = document.getElementById('book-id').value;
 
@@ -396,9 +398,15 @@ if (document.getElementById('rental-form')) {
             return;
         }
         console.log(rentData)
+        const returnDate_format = new Date();
+        returnDate_format.setDate(returnDate.getDate() + 15);
+
+        const formattedDate = returnDate.toLocaleString('pt-BR', {day: '2-digit',month: '2-digit',year: 'numeric',hour: '2-digit',minute: '2-digit',hour12: false
+        });
 
         // Success
-        resultDiv.textContent = `Êxito. O livro foi alugado para a Matrícula: ${studentCardId}.`;
+        //resultDiv.textContent = `Êxito. O livro de ID ${bookId} foi alugado para a Matrícula: ${studentCardId}.`;
+        showError(`Êxito. O livro de ID ${bookId} foi alugado para a Matrícula: ${studentCardId}\n\nData para devolução: ${formattedDate}`)
     });
 }
 
@@ -471,8 +479,8 @@ window.searchBooks = async function () {
 
 //Return form
 
-if (document.getElementById('return-form')) { 
-    document.getElementById('return-form').addEventListener('submit', async function (event) { 
+if (document.getElementById('return-form')) {
+    document.getElementById('return-form').addEventListener('submit', async function (event) {
         event.preventDefault();
 
         const studentCardId = document.getElementById('return-student-card-id').value;
@@ -489,23 +497,26 @@ if (document.getElementById('return-form')) {
         const resultDiv = document.getElementById('result');
 
         if (rentCheckError) {
-            resultDiv.textContent = `Error checking rental status: ${rentCheckError.message}`;
+            //resultDiv.textContent = `Error checking rental status: ${rentCheckError.message}`;
+            showError(`Error checking rental status: ${rentCheckError.message}`)
             return;
         }
 
         if (!bookData || bookData.is_available || bookData.rented_by != studentCardId) {
-            resultDiv.textContent = 'Erro: Este livro não está alugado ou está alugado por outro estudante.';
+           // resultDiv.textContent = 'Erro: Este livro não está alugado ou está alugado por outro estudante.';
+            showError('Erro: Este livro não está alugado ou está alugado por outro estudante.')
+            
             return;
         }
 
         // Update the book's status to available and clear rental information
         const { data: returnData, error: returnError } = await supabase
             .from('books')
-            .update({ 
-                is_available: true, 
-                rented_by: null, 
-                rented_at: null, 
-                return_date: null 
+            .update({
+                is_available: true,
+                rented_by: null,
+                rented_at: null,
+                return_date: null
             })
             .eq('id', bookId);
 
@@ -515,7 +526,10 @@ if (document.getElementById('return-form')) {
         }
         console.log("Book returned: " + returnData)
 
+
         // Success
-        resultDiv.textContent = `Êxito. O livro foi devolvido pela a Matrícula: ${studentCardId}.`;
+        //resultDiv.textContent = `Êxito. O livro de ID ${bookId} foi devolvido pela Matrícula: ${studentCardId}.`;
+        showError(`Êxito. O livro de ID ${bookId} foi devolvido pela Matrícula: ${studentCardId}`)
+
     });
 }

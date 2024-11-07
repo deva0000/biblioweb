@@ -112,7 +112,26 @@
             </form>
         </div>
     </main>
+    <div id="errorPopup" class="popup">
+        <p id="errorMessage"></p>
+        <button class="ok-button">OK</button>
+    </div>
+    <script>
+        const popup = document.getElementById('errorPopup');
+        const message = document.getElementById('errorMessage');
+        const okButton = popup.querySelector('.ok-button');
+        
+        function showError(errorText) {
+            message.textContent = errorText;
+            popup.classList.add('show');
+        }
 
+        okButton.addEventListener('click', () => {
+            popup.classList.remove('show');
+        });
+
+
+    </script>
 
 
 </body>
